@@ -15,7 +15,7 @@ const Shop = () => {
         search: searchParams.get('search') || '',
         origin: searchParams.get('origin') || '',
         genre: searchParams.get('genre') || '',
-        sort: searchParams.get('sort') || '-createdAt',
+        sort: searchParams.get('sort') || 'newest',
         page: parseInt(searchParams.get('page')) || 1
     });
 
@@ -80,11 +80,18 @@ const Shop = () => {
             }
         };
         fetchBooks();
-        setSearchParams(filters);
+        // Only write non-empty params to URL to avoid pollution
+        const cleanParams = {};
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value !== '' && value !== null && value !== undefined) {
+                cleanParams[key] = value;
+            }
+        });
+        setSearchParams(cleanParams);
     }, [filters]);
 
     const handleFilterChange = (key, value) => {
-        setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
+        setFilters(prev => ({ ...prev, [key]: value, ...(key !== 'page' ? { page: 1 } : {}) }));
     };
 
     return (
@@ -156,10 +163,10 @@ const Shop = () => {
                                     onChange={(e) => handleFilterChange('sort', e.target.value)}
                                     className="bg-gray-50 border-none rounded-xl px-4 py-2 text-sm font-bold focus:ring-2 focus:ring-vanxuan-red text-vanxuan-dark cursor-pointer"
                                 >
-                                    <option value="-createdAt">Mới nhất</option>
-                                    <option value="-soldCount">Bán chạy nhất</option>
-                                    <option value="price">Giá thấp - cao</option>
-                                    <option value="-price">Giá cao - thấp</option>
+                                    <option value="newest">Mới nhất</option>
+                                    <option value="best_selling">Bán chạy nhất</option>
+                                    <option value="price_asc">Giá thấp - cao</option>
+                                    <option value="price_desc">Giá cao - thấp</option>
                                 </select>
                             </div>
                         </div>

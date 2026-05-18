@@ -62,7 +62,8 @@ export const updateProfile = async (req, res, next) => {
                     email: user.email,
                     name: user.name,
                     role: user.role,
-                    addresses: user.addresses
+                    addresses: user.addresses,
+                    createdAt: user.createdAt
                 }
             }
         });

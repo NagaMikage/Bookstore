@@ -6,7 +6,7 @@ import { processBookImages, deleteBookImages } from '../utils/imageProcessor.js'
 // @access  Public
 export const getBooks = async (req, res, next) => {
     try {
-        const { page = 1, limit = 12, search, origin, genre } = req.query;
+        const { page = 1, limit = 12, search, origin, genre, sort } = req.query;
 
         const filter = {};
 
@@ -25,12 +25,28 @@ export const getBooks = async (req, res, next) => {
             filter['categories.genres'] = genre;
         }
 
+        // Map sort param to MongoDB sort option
+        const sortOptions = {
+            price_asc: { price: 1 },
+            price_desc: { price: -1 },
+            price: { price: 1 },
+            '-price': { price: -1 },
+            name_asc: { title: 1 },
+            name_desc: { title: -1 },
+            newest: { createdAt: -1 },
+            '-createdAt': { createdAt: -1 },
+            oldest: { createdAt: 1 },
+            best_selling: { soldCount: -1 },
+            '-soldCount': { soldCount: -1 }
+        };
+        const sortOption = sortOptions[sort] || { createdAt: -1 };
+
         const skip = (page - 1) * limit;
 
         const books = await Book.find(filter)
             .populate('categories.origin', 'name slug')
             .populate('categories.genres', 'name slug')
-            .sort({ createdAt: -1 })
+            .sort(sortOption)
             .skip(skip)
             .limit(parseInt(limit));
 

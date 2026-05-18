@@ -33,7 +33,6 @@ const bookEmbeddingSchema = new mongoose.Schema(
 );
 
 // Index for efficient queries
-bookEmbeddingSchema.index({ bookId: 1 });
 bookEmbeddingSchema.index({ lastUpdated: 1 });
 
 const BookEmbedding = mongoose.model('BookEmbedding', bookEmbeddingSchema);

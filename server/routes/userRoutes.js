@@ -14,7 +14,7 @@ router.use(authenticate);
 
 router.get('/profile', getProfile);
 router.put('/profile', updateProfile);
-router.put('/change-password', changePassword);
+router.put('/password', changePassword);
 router.put('/promote-admin', promoteToAdmin); // TEMPORARY endpoint
 
 export default router;

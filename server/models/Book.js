@@ -87,7 +87,6 @@ bookSchema.pre('save', function (next) {
 
 // Text index for search
 bookSchema.index({ title: 'text', author: 'text' });
-bookSchema.index({ slug: 1 });
 bookSchema.index({ 'categories.genres': 1 });
 
 const Book = mongoose.model('Book', bookSchema);
